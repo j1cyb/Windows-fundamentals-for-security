@@ -1,6 +1,6 @@
 # Managing Processes 
 
-## 1. What is a Process?
+##  What is a Process?
 A **process** is an instance of a program that is currently running on a system.  
 In Windows, every running application or system component operates as a process.
 
@@ -16,7 +16,7 @@ Types of processes:
 
 ---
 
-## 2. Process vs Service
+##  Process vs Service
 
 | Feature | Process | Service |
 |------|--------|--------|
@@ -31,7 +31,7 @@ Attackers often disguise malicious programs as legitimate services to maintain p
 
 ---
 
-## 3. Why Process Monitoring is Important for Security
+##  Why Process Monitoring is Important for Security
 Monitoring processes helps with:
 - **Early malware detection**
 - **Identifying unauthorized programs**
@@ -46,9 +46,9 @@ Monitoring processes helps with:
 
 ---
 
-## 4. Process Monitoring Tools
+##  Process Monitoring Tools
 
-### 4.1 Task Manager (GUI Tool)
+### Task Manager (GUI Tool)
 
 #### Opening Task Manager
 - `Ctrl + Shift + Esc`
@@ -107,7 +107,7 @@ Key features:
 
 ---
 
-### 4.2 Command Prompt
+###  Command Prompt
 
 #### tasklist
 Displays running processes:
@@ -201,7 +201,7 @@ taskkill /FI "USERNAME eq Taylor" /F
 
 ---
 
-## 5. Security Best Practices
+## Security Best Practices
 
 * Verify the **file path** of system processes.
 * Investigate unknown or suspicious processes immediately.
@@ -216,7 +216,7 @@ taskkill /FI "USERNAME eq Taylor" /F
 
 ---
 
-## 6. Summary
+##  Summary
 
 Understanding and monitoring Windows processes is a **core defensive security skill**.
 
