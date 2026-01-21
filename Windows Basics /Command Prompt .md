@@ -71,11 +71,16 @@ What is CMD?
  cd - Change Directory
  
  Used to navigate between folders
+ 
 
  Examples:
+ 
          cd Files
+         
          cd ..
+         
          cd \
+         
          cd C:\Windows
 
   Security perspective:
