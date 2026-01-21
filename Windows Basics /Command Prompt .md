@@ -1,5 +1,4 @@
- Windows Basics: Command Prompt (CMD)
- Cyber Fundamentals
+ Command Prompt (CMD)
  
 What is CMD?
  CMD (Command Prompt) is a command-line interface in Windows
