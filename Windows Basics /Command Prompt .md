@@ -1,6 +1,8 @@
  Command Prompt (CMD)
  
 What is CMD?
+
+
  CMD (Command Prompt) is a command-line interface in Windows
  that allows users to interact directly with the operating
  system using text-based commands instead of a GUI.
