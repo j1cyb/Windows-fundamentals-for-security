@@ -1,4 +1,4 @@
-# Managing Processes (Security-Oriented Explanation)
+# Managing Processes 
 
 ## 1. What is a Process?
 A **process** is an instance of a program that is currently running on a system.  
