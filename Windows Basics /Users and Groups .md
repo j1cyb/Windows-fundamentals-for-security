@@ -1,9 +1,9 @@
 
-# Windows Basics
+# Users and Groups
 
 ---
 
-## 1. Core Concepts
+##  Core Concepts
 
 ### User
 - A user is an individual account that can:
