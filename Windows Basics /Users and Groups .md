@@ -242,7 +242,7 @@ Any change without:
 * Local Administrator = Full control
 
 **Attacker mindset:**
-"Which group gives maximum access with minimal noise?"
+Which group gives maximum access with minimal noise?
 
 **Defender mindset:**
-"Which account or group change indicates an intrusion?"
+Which account or group change indicates an intrusion?
