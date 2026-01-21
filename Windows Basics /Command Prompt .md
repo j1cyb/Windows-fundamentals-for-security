@@ -1,287 +1,347 @@
- Command Prompt (CMD)
- 
-What is CMD?
+# Command Prompt (CMD)
 
+## What is CMD?
 
- CMD (Command Prompt) is a command-line interface in Windows
- that allows users to interact directly with the operating
- system using text-based commands instead of a GUI.
+CMD (Command Prompt) is a command-line interface in Windows  
+that allows users to interact directly with the operating  
+system using text-based commands instead of a GUI.
 
- 
- It usually appears like this:
- C:\Users\Username>
+It usually appears like this:
+```cmd
+C:\Users\Username>
+````
 
- This is called the:
- Current Working Directory
- which is the folder where commands are executed.
+This is called the:
+**Current Working Directory**
+which is the folder where commands are executed.
 
+---
 
- Why use CMD?
+## Why use CMD?
 
- - Easy to use
- - Commands execute directly on the system
- - Provides faster and more precise control over:
-     * Files
-     * Users
-     * Network
-     * System configuration
+* Easy to use
+* Commands execute directly on the system
+* Provides faster and more precise control over:
 
-  CMD vs PowerShell
+  * Files
+  * Users
+  * Network
+  * System configuration
 
+---
 
- CMD:
-  - Older tool
-  - Uses text-based commands
-  - Limited functionality
-  - Used for basic and quick tasks
-  - Security-wise: commonly used in simple attacks
+## CMD vs PowerShell
 
- PowerShell:
-  - Newer and more advanced
-  - Uses commands and objects (Objects)
-  - Very powerful
-  - Used for automation, system administration, and scripting
-  - Security-wise: used in advanced attacks
+### CMD:
 
-  Summary:
-  CMD        -> Basic and fast tool
-  PowerShell -> Powerful tool for administration, offense, and defense
+* Older tool
+* Uses text-based commands
+* Limited functionality
+* Used for basic and quick tasks
+* Security-wise: commonly used in simple attacks
 
+### PowerShell:
 
+* Newer and more advanced
+* Uses commands and objects (Objects)
+* Very powerful
+* Used for automation, system administration, and scripting
+* Security-wise: used in advanced attacks
 
-  Why is CMD important for security?
+**Summary:**
 
-  - Available by default on all Windows systems (no installation needed)
-  - Used by:
-    * Attackers to control the system
-    * Defenders for investigation and analysis
-   
-  - Many malicious programs:
-    * Execute CMD commands in the background
-    * Rely on CMD for movement inside the system
+* CMD → Basic and fast tool
+* PowerShell → Powerful tool for administration, offense, and defense
 
- Note:
-    Any CMD activity = direct system activity
+---
 
+## Why is CMD important for security?
 
+* Available by default on all Windows systems (no installation needed)
+* Used by:
 
+  * Attackers to control the system
+  * Defenders for investigation and analysis
+* Many malicious programs:
 
- Basic CMD Commands
+  * Execute CMD commands in the background
+  * Rely on CMD for movement inside the system
 
+**Note:**
+Any CMD activity = direct system activity
 
- cd - Change Directory
- 
- Used to navigate between folders
- 
+---
 
- Examples:
- 
-         cd Files
-         
-         cd ..
-         
-         cd \
-         
-         cd C:\Windows
+## Basic CMD Commands
 
-  Security perspective:
-  
-  - Attackers move through directories to search for valuable files
-  - Frequent access to sensitive folders (System32, Users) is suspicious
+### cd – Change Directory
 
+Used to navigate between folders
 
+**Examples:**
 
+```cmd
+cd Files
+cd ..
+cd \
+cd C:\Windows
+```
 
- dir - List files and folders
+**Security perspective:**
 
- dir
- dir C:\Windows\System32
+* Attackers move through directories to search for valuable files
+* Frequent access to sensitive folders (System32, Users) is suspicious
 
- Security perspective:
-  - Used for system reconnaissance
-  - Repeated use in sensitive directories indicates suspicious behavior
+---
 
+### dir – List files and folders
 
-  type - Display file contents
-  
-  type file.txt
+```cmd
+dir
+dir C:\Windows\System32
+```
 
- Security perspective:
- 
- - Reading configuration files
- - Reading stored credentials
- - Reading scripts
+**Security perspective:**
 
+* Used for system reconnaissance
+* Repeated use in sensitive directories indicates suspicious behavior
 
- echo - Create / Modify files
- 
- Create a file:
-      echo hello > file.txt
+---
 
- Append to a file:
-      echo test >> file.txt
+### type – Display file contents
 
- Security perspective:
-  - Creating malicious scripts
-  - Creating backdoors
-  - Frequent use of > or >> is a red flag
+```cmd
+type file.txt
+```
 
+**Security perspective:**
 
+* Reading configuration files
+* Reading stored credentials
+* Reading scripts
 
- 
-  System Information Commands
-  
+---
+
+### echo – Create / Modify files
+
+Create a file:
+
+```cmd
+echo hello > file.txt
+```
+
+Append to a file:
+
+```cmd
+echo test >> file.txt
+```
+
+**Security perspective:**
+
+* Creating malicious scripts
+* Creating backdoors
+* Frequent use of `>` or `>>` is a red flag
+
+---
+
+## System Information Commands
+
+### whoami
+
+```cmd
 whoami
+whoami /all
+```
 
-  whoami
-  whoami /all
+**Security perspective:**
 
-Security perspective:
-  - Usually the first command executed by an attacker
-  - Used to determine:
-    * Current user
-    * Privileges
-    * Administrative access
+* Usually the first command executed by an attacker
+* Used to determine:
 
-  ipconfig
-  
+  * Current user
+  * Privileges
+  * Administrative access
+
+---
+
+### ipconfig
+
+```cmd
 ipconfig
 ipconfig /all
+```
 
-  Security perspective:
-  - Understanding the internal network
-  - Identifying the default gateway
-  - Checking domain membership
+**Security perspective:**
 
-  arp
-  
- arp -a
+* Understanding the internal network
+* Identifying the default gateway
+* Checking domain membership
 
-  Security perspective:
-  - Discovering other devices on the network
-  - Supporting lateral movement
+---
 
+### arp
 
-   set / echo %VAR%
-   
- set
- echo %APPDATA%
+```cmd
+arp -a
+```
 
-  Security perspective:
-  - Malware often stores files in %APPDATA%
-  - Environment variables are used to hide paths
-  
-  nslookup
-  
- nslookup example.com
- 
- nslookup -type=mx example.com
+**Security perspective:**
 
- Security perspective:
- - Domain reconnaissance
- - Identifying mail servers
- - External recon
+* Discovering other devices on the network
+* Supporting lateral movement
 
+---
 
+### set / echo %VAR%
 
- Common CMD Commands Used Maliciously
+```cmd
+set
+echo %APPDATA%
+```
 
- cd / dir      -> System reconnaissance
- whoami        -> Privilege enumeration
- echo >        -> Script creation
- type          -> Reading sensitive files
- ipconfig/arp  -> Network reconnaissance
- nslookup      -> External reconnaissance
- set           -> Hidden path discovery
+**Security perspective:**
 
+* Malware often stores files in `%APPDATA%`
+* Environment variables are used to hide paths
 
+---
 
- Detecting Suspicious CMD Usage (Defensive View)
+### nslookup
 
- Red flags:
-  - CMD launched without a clear reason
-  - CMD executed from:
-    * Word
-    * Excel
-    * PDF
-  - Frequent use of redirection (> or >>)
-  - CMD suddenly running as Administrator
-  - Network commands on a standard user machine
-  - CMD running in the background (Task Manager)
+```cmd
+nslookup example.com
+nslookup -type=mx example.com
+```
 
+**Security perspective:**
 
+* Domain reconnaissance
+* Identifying mail servers
+* External reconnaissance
 
-   
-  Important CMD Flags (Parameters)
-   
+---
 
-  A flag is an additional option used with a command
-  to modify its behavior or provide more detailed output
+## Common CMD Commands Used Maliciously
 
-  Example:
+| Command        | Malicious Purpose       |
+| -------------- | ----------------------- |
+| cd / dir       | System reconnaissance   |
+| whoami         | Privilege enumeration   |
+| echo >         | Script creation         |
+| type           | Reading sensitive files |
+| ipconfig / arp | Network reconnaissance  |
+| nslookup       | External reconnaissance |
+| set            | Hidden path discovery   |
+
+---
+
+## Detecting Suspicious CMD Usage (Defensive View)
+
+**Red flags:**
+
+* CMD launched without a clear reason
+* CMD executed from:
+
+  * Word
+  * Excel
+  * PDF
+* Frequent use of redirection (`>` or `>>`)
+* CMD suddenly running as Administrator
+* Network commands on a standard user machine
+* CMD running in the background (Task Manager)
+
+---
+
+## Important CMD Flags (Parameters)
+
+A flag is an additional option used with a command
+to modify its behavior or provide more detailed output
+
+**Example:**
+
+```cmd
 ipconfig /all
+```
 
+---
 
+### General Flags
 
-   
-  General Flags
- command /?
+```cmd
+command /?
+```
 
- Security perspective:
-  - Used by attackers to explore command capabilities
-  - Repeated usage may indicate reconnaissance
+**Security perspective:**
 
+* Used by attackers to explore command capabilities
+* Repeated usage may indicate reconnaissance
 
+---
 
-   dir Flags
-   
- dir /a      // Show hidden files
- dir /s      // Recursive listing
- dir /b      // Bare output
+### dir Flags
 
-  Security perspective:
-  - Discover hidden malware
-  - Perform wide reconnaissance
-  - Enable scripting
+```cmd
+dir /a      // Show hidden files
+dir /s      // Recursive listing
+dir /b      // Bare output
+```
 
+**Security perspective:**
 
+* Discover hidden malware
+* Perform wide reconnaissance
+* Enable scripting
 
-   cd Flag
-   
- cd /d D:\Tools
+---
 
-  Security perspective:
-  - Switching drives during an attack
+### cd Flag
 
+```cmd
+cd /d D:\Tools
+```
 
+**Security perspective:**
 
-   ipconfig Flags
-   
- ipconfig /all
+* Switching drives during an attack
+
+---
+
+### ipconfig Flags
+
+```cmd
+ipconfig /all
 ipconfig /release
 ipconfig /renew
+```
 
-  Security perspective:
-  - Gathering detailed network info
-  - Temporarily disrupting network connectivity
+**Security perspective:**
 
+* Gathering detailed network info
+* Temporarily disrupting network connectivity
 
+---
 
-   arp Flags
- arp -a
- arp -d *
+### arp Flags
 
- Security perspective:
- - Network discovery
- - Attempting to erase traces
+```cmd
+arp -a
+arp -d *
+```
 
+**Security perspective:**
 
+* Network discovery
+* Attempting to erase traces
 
- Security Summary
+---
 
-  CMD is a double-edged sword
-  - Attackers use it for reconnaissance, control, and malware creation
-  - Defenders monitor it using:
-    * Logs
-    * Command-line auditing
-    * EDR solutions
+## Security Summary
+
+CMD is a double-edged sword:
+
+* Attackers use it for reconnaissance, control, and malware creation
+* Defenders monitor it using:
+
+  * Logs
+  * Command-line auditing
+  * EDR solutions
