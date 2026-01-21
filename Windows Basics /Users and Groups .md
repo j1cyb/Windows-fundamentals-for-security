@@ -1,179 +1,248 @@
- Users and Groups
 
-Introduction
-Users and Groups are core components of Windows access control.
-Every action on a Windows system is tied to a user account and the groups it belongs to.
-Misconfigurations in users or group memberships are one of the most common causes of privilege escalation.
-Users and groups can be managed using both the GUI and CMD.
+# Windows Basics
 
---------------------------------------------------
-USERS (GUI)
---------------------------------------------------
+---
 
-Viewing Users
-Users can be viewed via:
-- lusrmgr.msc
-- Computer Management
+## 1. Core Concepts
 
-This interface displays all local user accounts.
-Disabled accounts appear with a down-arrow icon.
-System accounts (e.g. WDAGUtilityAccount) are often disabled by default.
+### User
+- A user is an individual account that can:
+  - Log in to the system
+  - Execute commands
+  - Run applications
+- A user does **not** inherently have privileges
+- Privileges are inherited from **group memberships**
 
-User Properties
-Each user account has:
-- Password configuration
-- Account status (enabled / disabled)
-- Group memberships
+### Group
+- A group is a container for privileges
+- Groups cannot log in
+- Any user added to a group inherits its permissions
 
-Creating a New User
-Actions → New User
-You can configure:
-- Username and password
-- User must change password at next logon
-- User cannot change password
-- Password never expires
+**Security Formula:**
+```
 
-Modifying or Deleting Users
-Right-click a user:
-- Reset password
-- Enable / Disable account
-- Rename account
-- Delete account
+User + Group Membership = Access Token = Effective Privileges
 
---------------------------------------------------
-GROUPS (GUI)
---------------------------------------------------
+````
 
-Viewing Groups
-Located under:
-Local Users and Groups → Groups
+---
 
-Groups define permissions, not identities.
-Many groups are built-in or created by installed software.
+## 2. Local Users
 
-Important Groups
-Administrators → Full system control
-Users → Standard access
-Remote Desktop Users → RDP access
-
-Managing Group Membership
-Users can be added or removed via:
-- Group properties (Members tab)
-- User properties (Member Of tab)
-
---------------------------------------------------
-USERS VIA CMD
---------------------------------------------------
-
-List all users
+### 2.1 Offensive – User Enumeration
+```cmd
 net user
+````
 
-View specific user
-net user Username
+**Attacker Objective:**
 
-Create user
-net user User1 Password123 /add
+* Identify valid local accounts
+* Detect naming patterns
+* Build a target list for credential attacks
 
-Delete user
-net user User1 /delete
+---
 
-Change password
-net user User1 NewPassword
+### 2.2 Offensive – User Profiling
 
-Disable user
-net user User1 /active:no
+```cmd
+net user Example
+```
 
-Enable user
-net user User1 /active:yes
+**Key Fields for Attackers:**
 
---------------------------------------------------
-NET USER FLAGS
---------------------------------------------------
+* Account active
+* Password expires
+* Last logon
+* Local Group Memberships
 
-/add
-Creates a new user account.
+**Abuse Opportunities:**
 
-/delete
-Deletes a user account.
+* Password never expires → long-term persistence
+* Old or inactive accounts → low monitoring
 
-/active:yes | no
-Enables or disables the account.
+---
 
-/expires:date
-Sets account expiration.
+### 2.3 Offensive – Malicious User Creation (Persistence)
 
-/passwordchg:yes | no
-Controls password change permission.
+```cmd
+net user backdoor P@ssw0rd /add
+net localgroup Administrators backdoor /add
+```
 
-/passwordreq:yes | no
-Requires password or not.
+**Impact:**
 
-/logonpasswordchg:yes | no
-Force password change at next login.
+* Local persistence mechanism
+* Privileged backdoor account
 
---------------------------------------------------
-GROUPS VIA CMD
---------------------------------------------------
+---
 
-List groups
+### 2.4 Defensive – User Monitoring
+
+* Monitor for:
+
+  * New local user creation
+  * Disabled account reactivation
+  * Password policy modifications
+* User creation without a change request = suspicious activity
+
+---
+
+## 3. Local Groups
+
+### 3.1 Offensive – Group Enumeration
+
+```cmd
 net localgroup
+```
 
-View group members
-net localgroup GroupName
+**High-Value Target Groups:**
 
-Create group
-net localgroup Group1 /add
+* Administrators
+* Remote Desktop Users
+* Backup Operators
+* Event Log Readers
 
-Add user to group
-net localgroup Group1 User1 /add
+---
 
-Remove user from group
-net localgroup Group1 User1 /delete
+### 3.2 Offensive – Group Membership Analysis
 
-Delete group
-net localgroup Group1 /delete
+```cmd
+net localgroup Administrators
+```
 
---------------------------------------------------
-NET LOCALGROUP FLAGS
---------------------------------------------------
+**Objective:**
 
-/add
-Creates a group or adds a user.
+* Identify low-privileged users inside high-privilege groups
 
-/delete
-Deletes a group or removes a user.
+---
 
---------------------------------------------------
-ATTACKER PERSPECTIVE
---------------------------------------------------
+### 3.3 Offensive – Privilege Escalation via Group Membership
 
-Attackers enumerate users and groups to identify privileged accounts.
-Common attacker actions:
-- Create new users
-- Add users to Administrators group
-- Abuse net user and net localgroup
-Group membership enumeration is a key step in privilege escalation.
+```cmd
+net localgroup "Remote Desktop Users" attacker /add
+```
 
---------------------------------------------------
-DEFENDER / SOC PERSPECTIVE
---------------------------------------------------
+**Result:**
 
-Monitor for:
-- New local user creation
-- Group membership changes
-- Execution of net user and net localgroup
-- Accounts enabled or disabled unexpectedly
+* Remote access without full administrator privileges
+* Low-noise lateral movement
 
-Audit privileged groups regularly.
-Correlate user changes with process creation and authentication logs.
+---
 
---------------------------------------------------
-SECURITY SUMMARY
---------------------------------------------------
+### 3.4 Offensive – Abuse of Non-Admin Groups
 
-Users define identity.
-Groups define permissions.
-Misconfigured groups lead to full system compromise.
-CMD usage is common in attacks and automation.
-Continuous monitoring of users and groups is essential.
+| Group                   | Abuse Capability             |
+| ----------------------- | ---------------------------- |
+| Backup Operators        | Dump SAM and SYSTEM          |
+| Event Log Readers       | Read or clear security logs  |
+| Power Users             | Execute high-impact binaries |
+| Remote Management Users | Remote system management     |
 
+---
+
+### 3.5 Defensive – Group Integrity Monitoring
+
+* Monitor:
+
+  * Group membership changes
+  * Creation of new privileged groups
+* Unexpected group modification = high-severity alert
+
+---
+
+## 4. Local Administrator
+
+### 4.1 Offensive – Why Local Administrator Matters
+
+If an attacker gains Local Administrator privileges, they can:
+
+* Disable security controls
+* Dump credentials
+* Create services and scheduled tasks
+
+**Result:** Full system compromise
+
+---
+
+### 4.2 Defensive – Monitoring Local Administrator Changes
+
+* Detect:
+
+  * Additions to the Administrators group
+  * Newly created administrator accounts
+* Any admin group modification = critical alert
+
+---
+
+## 5. GUI vs Command Prompt (CMD)
+
+### Offensive Perspective
+
+* CMD is:
+
+  * Native to Windows
+  * Low-noise
+  * Always available
+
+```cmd
+net user
+net localgroup
+net localgroup Administrators
+```
+
+---
+
+### Defensive Perspective
+
+* CMD is used for:
+
+  * Rapid system auditing
+  * Incident validation
+  * Pre/post-incident comparison
+
+---
+
+## 6. CMD Flags and Their Security Impact
+
+| Flag                   | Offensive Use                  | Defensive Interpretation               |
+| ---------------------- | ------------------------------ | -------------------------------------- |
+| /add                   | Persistence and privilege gain | Unauthorized account or group creation |
+| /delete                | Removal of legitimate users    | Destructive or evasive activity        |
+| Password never expires | Long-term access               | Policy misconfiguration                |
+| Account active         | Enable access                  | Dormant account abuse                  |
+
+---
+
+## 7. Detection and Logging
+
+### Critical Events to Detect
+
+* Local user creation or deletion
+* Group membership changes
+* Privilege escalation events
+
+### Detection Sources
+
+* Windows Security Event Log
+* Local Account Management events
+
+Any change without:
+
+* Approved change request
+* Incident context
+
+= **Potential compromise**
+
+---
+
+## Summary
+
+* Users = Entry point
+* Groups = Privilege amplification
+* Local Administrator = Full control
+
+**Attacker mindset:**
+"Which group gives maximum access with minimal noise?"
+
+**Defender mindset:**
+"Which account or group change indicates an intrusion?"
