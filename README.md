@@ -1,4 +1,4 @@
-# Windows Security Fundamentals (Blue Team Focus)
+# Windows Security Fundamentals
 
 This repository contains my learning notes and practical understanding of Windows fundamentals from a defensive (Blue Team) security perspective.
 
