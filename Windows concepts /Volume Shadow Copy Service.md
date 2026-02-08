@@ -1,4 +1,4 @@
-# Windows Concepts: Volume Shadow Copy Service (VSS)
+# Volume Shadow Copy Service (VSS)
 
 ## Overview
 
