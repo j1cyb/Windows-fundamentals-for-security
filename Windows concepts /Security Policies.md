@@ -1,4 +1,4 @@
-# Windows Security Policies 
+# Security Policies 
 
 ## Overview
 
